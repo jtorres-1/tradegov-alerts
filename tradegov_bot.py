@@ -7,7 +7,12 @@ from dotenv import load_dotenv
 load_dotenv()
 
 BASE = "https://congressinfor-production.up.railway.app"
-WATCHLIST = ["NVDA", "TSLA", "AAPL", "MSFT", "AMZN", "META", "GOOGL", "AMD"]
+WATCHLIST = [
+    "NVDA", "TSLA", "AAPL", "MSFT", "AMZN", "META", "GOOGL", "AMD",
+    "JPM", "BAC", "XOM", "CVX", "LMT", "RTX", "BA", "DIS",
+    "NFLX", "CRM", "ORCL", "INTC", "PYPL", "V", "MA", "JNJ",
+    "PFE", "MRNA", "WMT", "COST", "HD", "UNH", "T", "VZ"
+]
 SEEN_FILE = "seen_trades.json"
 
 TOKEN = os.getenv("TELEGRAM_BOT_TOKEN")
