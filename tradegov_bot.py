@@ -2,6 +2,7 @@ import requests
 import json
 import os
 import time
+from datetime import datetime
 from dotenv import load_dotenv
 
 load_dotenv()
@@ -14,6 +15,7 @@ WATCHLIST = [
     "PFE", "MRNA", "WMT", "COST", "HD", "UNH", "T", "VZ"
 ]
 SEEN_FILE = "seen_trades.json"
+CURRENT_YEAR = datetime.now().year
 
 TOKEN = os.getenv("TELEGRAM_BOT_TOKEN")
 CHANNEL = "@tradegovalerts"
@@ -51,9 +53,15 @@ def check_for_new_trades():
 
         for t in data.get("trades", []):
             trade_id = f"{t['member']}-{t['ticker']}-{t['tx_date']}-{t['amount']}"
-            if trade_id not in seen:
-                new_trades.append(t)
-                seen.add(trade_id)
+            if trade_id in seen:
+                continue
+            seen.add(trade_id)
+
+            tx_year = t["tx_date"][:4]
+            if tx_year != str(CURRENT_YEAR):
+                continue  # mark seen but don't alert on stale/prior-year trades
+
+            new_trades.append(t)
 
     with open(SEEN_FILE, "w") as f:
         json.dump(list(seen), f)
